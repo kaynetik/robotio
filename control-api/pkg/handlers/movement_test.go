@@ -18,7 +18,7 @@ type MockRobotSimulatorClient struct {
 }
 
 func (m *MockRobotSimulatorClient) GetSensorData(ctx context.Context, in *rspb.SensorRequest, opts ...grpc.CallOption) (*rspb.SensorResponse, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
@@ -54,7 +54,7 @@ type MockTelemetryClient struct {
 }
 
 func (m *MockTelemetryClient) CollectSensorData(ctx context.Context, in *tpb.SensorData, opts ...grpc.CallOption) (*tpb.CollectionResponse, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 

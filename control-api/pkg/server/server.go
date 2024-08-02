@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+
 	"github.com/kaynetik/robotio/control-api/pkg/clients"
 	"github.com/kaynetik/robotio/control-api/pkg/handlers"
 	pb "github.com/kaynetik/robotio/shared/controlapi"

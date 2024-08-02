@@ -1,13 +1,14 @@
 package main
 
 import (
+	"net"
+	"net/http"
+
 	"github.com/kaynetik/robotio/control-api/pkg/server"
 	"github.com/kaynetik/robotio/control-api/pkg/simulation"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
-	"net"
-	"net/http"
 )
 
 const (

@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
+	"net"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"net"
 
 	pb "github.com/kaynetik/robotio/shared/telemetry"
 	"google.golang.org/grpc"

@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"io"
 	"math/rand"
 	"net"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	pb "github.com/kaynetik/robotio/shared/robotsimulator"
 	tpb "github.com/kaynetik/robotio/shared/telemetry"

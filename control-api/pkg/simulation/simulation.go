@@ -3,10 +3,11 @@ package simulation
 import (
 	"context"
 	"fmt"
-	"github.com/rs/zerolog/log"
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/kaynetik/robotio/control-api/pkg/handlers"
 	pb "github.com/kaynetik/robotio/shared/controlapi"
