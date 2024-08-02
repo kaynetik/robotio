@@ -1,0 +1,45 @@
+services:
+  robot-simulator:
+    build:
+      context: .
+      dockerfile: robot-simulator/Dockerfile
+    container_name: robot_simulator
+    ports:
+      - "50051:50051"
+    depends_on:
+      - telemetry
+
+  telemetry:
+    build:
+      context: .
+      dockerfile: telemetry/Dockerfile
+    container_name: telemetry
+    ports:
+      - "50053:50053"
+
+  control-api:
+    build:
+      context: .
+      dockerfile: control-api/Dockerfile
+    container_name: control_api
+    ports:
+      - "50052:50052"
+      - "8080:8080"
+    depends_on:
+      - robot-simulator
+      - telemetry
+
+#
+#  telemetry-monitoring:
+#    build: ./telemetry-monitoring
+#    container_name: telemetry_monitoring
+#    ports:
+#      - "9090:9090"   # Prometheus
+#      - "3000:3000"   # Grafana
+#    volumes:
+#      - ./telemetry-monitoring/grafana:/etc/grafana
+#      - ./telemetry-monitoring/prometheus:/etc/prometheus
+#
+volumes:
+  grafana_data:
+  prometheus_data:
