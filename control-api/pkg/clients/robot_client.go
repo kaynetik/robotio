@@ -11,5 +11,6 @@ func NewRobotClient(address string) (rspb.RobotSimulatorClient, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return rspb.NewRobotSimulatorClient(conn), nil
 }

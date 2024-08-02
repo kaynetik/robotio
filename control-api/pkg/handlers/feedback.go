@@ -2,14 +2,14 @@ package handlers
 
 import (
 	"context"
-	"log"
+	"github.com/rs/zerolog/log"
 
 	pb "github.com/kaynetik/robotio/shared/controlapi"
 	tpb "github.com/kaynetik/robotio/shared/telemetry"
 )
 
 func GetFeedback(ctx context.Context, req *pb.FeedbackRequest, telemetryClient tpb.TelemetryClient) (*pb.FeedbackResponse, error) {
-	log.Printf("Received GetFeedback request: feedback_type=%s", req.FeedbackType)
+	log.Info().Msgf("received GetFeedback request: feedback_type=%s", req.FeedbackType)
 
 	data := map[string]string{"battery": "80%", "status": "operational"}
 
@@ -18,7 +18,7 @@ func GetFeedback(ctx context.Context, req *pb.FeedbackRequest, telemetryClient t
 		Data:       data,
 	})
 	if err != nil {
-		log.Printf("Failed to collect sensor data: %v", err)
+		log.Err(err).Msg("failed to collect sensor data")
 	}
 
 	return &pb.FeedbackResponse{Data: data}, nil

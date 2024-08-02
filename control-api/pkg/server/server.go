@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/kaynetik/robotio/control-api/pkg/clients"
 	"github.com/kaynetik/robotio/control-api/pkg/handlers"
@@ -21,12 +21,12 @@ type controlAPIServer struct {
 func RegisterServices(s *grpc.Server) {
 	telemetryClient, err := clients.NewTelemetryClient("telemetry:50053")
 	if err != nil {
-		log.Fatalf("failed to connect to telemetry service: %v", err)
+		log.Error().Err(err).Msg("failed to connect to telemetry service")
 	}
 
 	robotClient, err := clients.NewRobotClient("robot-simulator:50051")
 	if err != nil {
-		log.Fatalf("failed to connect to robot simulator service: %v", err)
+		log.Fatal().Err(err).Msg("failed to connect to robot simulator service")
 	}
 
 	server := &controlAPIServer{

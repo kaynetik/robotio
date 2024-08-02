@@ -13,12 +13,18 @@ import (
 	"net/http"
 )
 
-// FIXME: Switch to ZeroLog
+const (
+	telemetryTarget   = "telemetry:50053"
+	robotTarget       = "robot-simulator:50051"
+	portControlAPI    = ":50052"
+	portRunSimulation = ":8080"
+)
+
 func main() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	zerolog.SetGlobalLevel(zerolog.DebugLevel) // FIXME: Ingest from paramstore.
 
-	conn, err := grpc.NewClient("telemetry:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(telemetryTarget, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Err(err).Msg("failed to connect to telemetry service")
 		// Unavailable telemetry would be an issue, but it's not a blocking issue.
@@ -27,7 +33,7 @@ func main() {
 
 	telemetryClient := tpb.NewTelemetryClient(conn)
 
-	robotConn, err := grpc.NewClient("robot-simulator:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	robotConn, err := grpc.NewClient(robotTarget, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to connect to robot simulator service")
 	}
@@ -38,12 +44,12 @@ func main() {
 	sim := simulation.NewSimulation(robotClient, telemetryClient)
 	go func() {
 		sim.RegisterHTTPHandlers()
-		if err = http.ListenAndServe(":8080", nil); err != nil {
+		if err = http.ListenAndServe(portRunSimulation, nil); err != nil {
 			log.Fatal().Err(err).Msg("failed initiating simulation handler")
 		}
 	}()
 
-	lis, err := net.Listen("tcp", ":50052")
+	lis, err := net.Listen("tcp", portControlAPI)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to listen on control-api service")
 	}

@@ -20,7 +20,7 @@ message CollectionResponse {
 
 message LogEntry {
   string message = 1;
-  string level = 2;
+  string level = 2; // TODO: Switch to ENUM.
 }
 
 message LogResponse {

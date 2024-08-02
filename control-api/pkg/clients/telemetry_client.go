@@ -11,5 +11,6 @@ func NewTelemetryClient(address string) (tpb.TelemetryClient, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return tpb.NewTelemetryClient(conn), nil
 }

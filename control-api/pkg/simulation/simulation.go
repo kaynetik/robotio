@@ -3,7 +3,7 @@ package simulation
 import (
 	"context"
 	"fmt"
-	"log"
+	"github.com/rs/zerolog/log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -45,7 +45,7 @@ func (s *Simulation) RunSimulation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, err := fmt.Fprintf(w, "Simulation completed successfully!"); err != nil {
-		log.Printf("Failed to write response: %v", err)
+		log.Debug().Err(err).Msg("Failed to write response")
 
 		return
 	}
@@ -53,6 +53,7 @@ func (s *Simulation) RunSimulation(w http.ResponseWriter, r *http.Request) {
 
 func randomDirection() string {
 	directions := []string{"forward", "backward", "left", "right"}
+
 	return directions[rand.Intn(len(directions))]
 }
 
