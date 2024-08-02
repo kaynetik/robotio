@@ -102,3 +102,4 @@ go test -json -race ./... | tparse -all
 - [ ] Add `OTEL` to each service
 - [ ] Add more tests
 - [ ] Fix `Tempo` config
+- [ ] Add a test for graceful shutdown and spans clearing
