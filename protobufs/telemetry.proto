@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package telemetry;
+
+option go_package = "github.com/kaynetik/robotio/shared/telemetry";
+
+service Telemetry {
+  rpc CollectSensorData (SensorData) returns (CollectionResponse);
+  rpc LogInteraction (LogEntry) returns (LogResponse);
+}
+
+message SensorData {
+  string sensor_type = 1;
+  map<string, string> data = 2;
+}
+
+message CollectionResponse {
+  bool success = 1;
+}
+
+message LogEntry {
+  string message = 1;
+  string level = 2;
+}
+
+message LogResponse {
+  bool success = 1;
+}

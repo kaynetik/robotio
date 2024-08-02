@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package controlapi;
+
+option go_package = "github.com/kaynetik/robotio/shared/controlapi";
+
+service ControlAPI {
+  rpc IssueMovement (MovementCommand) returns (MovementResponse);
+  rpc GetFeedback (FeedbackRequest) returns (FeedbackResponse);
+}
+
+message MovementCommand {
+  string direction = 1;
+  float distance = 2;
+}
+
+message MovementResponse {
+  bool success = 1;
+}
+
+message FeedbackRequest {
+  string feedback_type = 1;
+}
+
+message FeedbackResponse {
+  map<string, string> data = 1;
+}

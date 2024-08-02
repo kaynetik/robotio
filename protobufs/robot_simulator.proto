@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package robotsimulator;
+
+option go_package = "github.com/kaynetik/robotio/shared/robotsimulator";
+
+service RobotSimulator {
+  rpc MoveRobot (stream MoveRequest) returns (stream MoveResponse);
+  rpc GetSensorData (SensorRequest) returns (SensorResponse);
+}
+
+message MoveRequest {
+  string direction = 1;
+  float distance = 2;
+}
+
+message MoveResponse {
+  bool success = 1;
+}
+
+message SensorRequest {
+  string sensor_type = 1;
+}
+
+message SensorResponse {
+  map<string, string> data = 1;
+}
