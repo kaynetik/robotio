@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"io"
+	"math/rand"
 	"net"
 
 	pb "github.com/kaynetik/robotio/shared/robotsimulator"
@@ -31,12 +33,11 @@ func (s *server) MoveRobot(stream pb.RobotSimulator_MoveRobotServer) error {
 
 		log.Info().Msgf("received MoveRobot request: direction=%s, distance=%f", req.Direction, req.Distance)
 
-		//FIXME: Simulate movement logic here
-		// Add some randomness...
-		success := true
+		// Simulate movement logic with a small degree of failure
+		success := rand.Intn(10) != 0
 
 		_, err = s.telemetryClient.LogInteraction(context.TODO(), &tpb.LogEntry{
-			Message: "MoveRobot request received",
+			Message: fmt.Sprintf("MoveRobot request received. Movement was [%t]", success),
 			Level:   "INFO",
 		})
 		if err != nil {

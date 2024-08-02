@@ -29,7 +29,7 @@ func NewSimulation(robotClient rspb.RobotSimulatorClient, telemetryClient tpb.Te
 func (s *Simulation) RunSimulation(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 500; i++ {
 		req := &pb.MovementCommand{
 			Direction: randomDirection(),
 			Distance:  randomDistance(),
