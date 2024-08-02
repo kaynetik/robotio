@@ -26,11 +26,15 @@ func (s *server) LogInteraction(ctx context.Context, req *pb.LogEntry) (*pb.LogR
 	return &pb.LogResponse{Success: true}, nil
 }
 
+const (
+	portTelemetry = ":50053"
+)
+
 func main() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
-	lis, err := net.Listen("tcp", ":50053")
+	listener, err := net.Listen("tcp", portTelemetry)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to listen")
 	}
@@ -38,8 +42,8 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterTelemetryServer(s, &server{})
 
-	log.Printf("server listening at %v", lis.Addr())
-	if err = s.Serve(lis); err != nil {
+	log.Info().Str("address", listener.Addr().String()).Msg("server listening at address")
+	if err = s.Serve(listener); err != nil {
 		log.Fatal().Err(err).Msg("failed to serve")
 	}
 }
