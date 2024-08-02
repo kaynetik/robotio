@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"log"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"net"
 
 	pb "github.com/kaynetik/robotio/shared/telemetry"
@@ -14,19 +15,24 @@ type server struct {
 }
 
 func (s *server) CollectSensorData(ctx context.Context, req *pb.SensorData) (*pb.CollectionResponse, error) {
-	log.Printf("Received CollectSensorData request: sensor_type=%s, data=%v", req.SensorType, req.Data)
+	log.Info().Msgf("Received CollectSensorData request: sensor_type=%s, data=%v", req.SensorType, req.Data)
+
 	return &pb.CollectionResponse{Success: true}, nil
 }
 
 func (s *server) LogInteraction(ctx context.Context, req *pb.LogEntry) (*pb.LogResponse, error) {
-	log.Printf("Received LogInteraction request: message=%s, level=%s", req.Message, req.Level)
+	log.Info().Msgf("Received LogInteraction request: message=%s, level=%s", req.Message, req.Level)
+
 	return &pb.LogResponse{Success: true}, nil
 }
 
 func main() {
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+
 	lis, err := net.Listen("tcp", ":50053")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatal().Err(err).Msg("failed to listen")
 	}
 
 	s := grpc.NewServer()
@@ -34,6 +40,6 @@ func main() {
 
 	log.Printf("server listening at %v", lis.Addr())
 	if err = s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatal().Err(err).Msg("failed to serve")
 	}
 }
