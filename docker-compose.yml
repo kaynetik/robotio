@@ -25,6 +25,7 @@ services:
     ports:
       - "50052:50052"
       - "8080:8080"
+      - "2112:2112"
     depends_on:
       - robot-simulator
       - telemetry
@@ -47,6 +48,38 @@ services:
       - ./promtail-config.yaml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    ports:
+      - "3200:3200"
+      - "14268"
+      - "3200"
+      - "55680"
+      - "55681"
+      - "9411"
+    volumes:
+      - ./tempo.yaml:/etc/tempo/tempo.yaml
+      - tempo-storage:/var/tempo
+
+  tempo-query:
+    image: grafana/tempo-query
+    command: [ "--grpc-storage-plugin.configuration-file=/etc/tempo-query.yml" ]
+    volumes:
+      - ./tempo/tempo-query.yml:/etc/tempo-query.yml
+    ports:
+      - "16686:16686"  # jaeger-ui
+    depends_on:
+      - tempo
+
   grafana:
     image: grafana/grafana:10.1.1
     container_name: grafana
@@ -56,6 +89,11 @@ services:
       - grafana-storage:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
 
 volumes:
   grafana-storage:
+  tempo-storage:
