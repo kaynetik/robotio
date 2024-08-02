@@ -1,5 +1,8 @@
 # Robotio
 
+This monorepo contains the source code and configuration for the RobotIO project, including the robot-simulator,
+telemetry, control-api services, and logging infrastructure with Grafana, Loki, and Promtail.
+
 ## Usage
 
 Pre-requisites for running the project in its current form are just `docker` and `docker-compose`.
@@ -11,7 +14,27 @@ The demo project could also be run directly with `go` & `make`, but that flow wa
 docker-compose up --build
 ```
 
-### Access services
+## Services
+
+### Control API
+
+The Control API service handles requests to control the robot and retrieve feedback.
+
+### Robot Simulator
+
+The Robot Simulator service simulates the robot's movements and sensor data.
+
+### Telemetry
+
+The Telemetry service logs interactions and collects sensor data.
+
+### Logging and Monitoring
+
+Loki is used for log aggregation.
+
+Promtail is used to scrape logs from the Docker containers and push them to Loki.
+
+Grafana is used for visualizing the logs and metrics.
 
 #### gRPC Services
 
@@ -25,6 +48,18 @@ docker-compose up --build
 - `http://localhost:3000` - Grafana
 - `http://localhost:9090` - Prometheus
 - `http://localhost:3100` - Loki
+
+## Configuration Files
+
+Loki => Located in `loki-config.yaml`.`
+Promtail Configuration
+
+Promtail => Located in `promtail-config.yaml`.
+
+## Protobufs
+
+Shared protobuf definitions are located in the `protobufs/*` directory. And generated code is located in the `shared/*`.
+These are used for gRPC communication between services.
 
 ## Grafana
 
@@ -49,6 +84,18 @@ Prometheus is configured to scrape metrics from the Control API and Telemetry Se
 ## Tests
 
 Example tests can be found (at this moment) in the `control-api/pkg/handlers` package.
+
+To run tests, you can use the following command:
+
+```bash
+cd control-api && go test ./...
+```
+
+Or if you have available `tparse`:
+
+```bash
+go test -json -race ./... | tparse -all
+```
 
 ## TODOs
 
